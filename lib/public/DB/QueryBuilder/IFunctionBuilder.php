@@ -43,13 +43,12 @@ interface IFunctionBuilder {
 	/**
 	 * Combines two input strings
 	 *
-	 * @param string|ILiteral|IParameter|IQueryFunction $x The first input string
-	 * @param string|ILiteral|IParameter|IQueryFunction $y The seccond input string
+	 * @param string|ILiteral|IParameter|IQueryFunction ...$exprs Expressions or literal strings
 	 *
 	 * @return IQueryFunction
 	 * @since 12.0.0
 	 */
-	public function concat($x, $y): IQueryFunction;
+	public function concat(...$expr): IQueryFunction;
 
 	/**
 	 * Takes a substring from the input string

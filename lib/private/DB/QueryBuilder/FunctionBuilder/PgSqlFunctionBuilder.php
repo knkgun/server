@@ -27,7 +27,13 @@ use OC\DB\QueryBuilder\QueryFunction;
 use OCP\DB\QueryBuilder\IQueryFunction;
 
 class PgSqlFunctionBuilder extends FunctionBuilder {
-	public function concat($x, $y): IQueryFunction {
-		return new QueryFunction('(' . $this->helper->quoteColumnName($x) . ' || ' . $this->helper->quoteColumnName($y) . ')');
+	public function concat(...$expr): IQueryFunction {
+		foreach ($expr as $item) {
+			$list[] = $this->helper->quoteColumnName($item);
+		}
+		if (!count($list)) {
+			throw new \LogicException('Expected at least two expressions');
+		}
+		return new QueryFunction(sprintf('(%s)', implode(' || ', $list)));
 	}
 }

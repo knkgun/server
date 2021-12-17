@@ -45,8 +45,14 @@ class FunctionBuilder implements IFunctionBuilder {
 		return new QueryFunction('MD5(' . $this->helper->quoteColumnName($input) . ')');
 	}
 
-	public function concat($x, $y): IQueryFunction {
-		return new QueryFunction('CONCAT(' . $this->helper->quoteColumnName($x) . ', ' . $this->helper->quoteColumnName($y) . ')');
+	public function concat(...$expr): IQueryFunction {
+		foreach ($expr as $item) {
+			$list[] = $this->helper->quoteColumnName($item);
+		}
+		if (!count($list)) {
+			throw new \LogicException('Expected at least two expressions');
+		}
+		return new QueryFunction(sprintf('CONCAT(%s)', implode(', ', $list)));
 	}
 
 	public function substring($input, $start, $length = null): IQueryFunction {
