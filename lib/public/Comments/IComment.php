@@ -278,4 +278,20 @@ interface IComment {
 	 * @since 19.0.0
 	 */
 	public function setReferenceId(?string $referenceId): IComment;
+
+	/**
+	 * returns the reactions array if exists
+	 *
+	 * @return array e.g. ["👍":1]
+	 */
+	public function getReactions(): array;
+
+	/**
+	 * sets the reactions array
+	 *
+	 * @param array|null $reactions e.g. ["👍":1]
+	 * @return IComment
+	 * @since 24.0.0
+	 */
+	public function setReactions(?array $reactions): IComment;
 }
