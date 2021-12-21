@@ -65,6 +65,7 @@ class FilesPlugin extends ServerPlugin {
 	public const SIZE_PROPERTYNAME = '{http://owncloud.org/ns}size';
 	public const GETETAG_PROPERTYNAME = '{DAV:}getetag';
 	public const LASTMODIFIED_PROPERTYNAME = '{DAV:}lastmodified';
+	public const CREATIONDATE_PROPERTYNAME = '{DAV:}creationdate';
 	public const OWNER_ID_PROPERTYNAME = '{http://owncloud.org/ns}owner-id';
 	public const OWNER_DISPLAY_NAME_PROPERTYNAME = '{http://owncloud.org/ns}owner-display-name';
 	public const CHECKSUMS_PROPERTYNAME = '{http://owncloud.org/ns}checksums';
@@ -396,6 +397,9 @@ class FilesPlugin extends ServerPlugin {
 				return $this->config->getSystemValue('data-fingerprint', '');
 			});
 			$propFind->handle(self::CREATION_TIME_PROPERTYNAME, function () use ($node) {
+				return $node->getFileInfo()->getCreationTime();
+			});
+			$propFind->handle(self::CREATIONDATE_PROPERTYNAME, function () use ($node) {
 				return $node->getFileInfo()->getCreationTime();
 			});
 		}
