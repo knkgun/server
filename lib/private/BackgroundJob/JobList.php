@@ -86,6 +86,25 @@ class JobList implements IJobList {
 					'last_checked' => $query->createNamedParameter($this->timeFactory->getTime(), IQueryBuilder::PARAM_INT),
 				]);
 			$query->execute();
+		} else {
+			if ($job instanceof IJob) {
+				$class = get_class($job);
+			} else {
+				$class = $job;
+			}
+
+			$argument = json_encode($argument);
+			if (strlen($argument) > 4000) {
+				throw new \InvalidArgumentException('Background job arguments can\'t exceed 4000 characters (json encoded)');
+			}
+
+			$reset = $this->connection->getQueryBuilder();
+			$reset->update('jobs')
+				->set('reserved_at', $reset->expr()->literal(0, IQueryBuilder::PARAM_INT))
+				->set('last_checked', $reset->createNamedParameter($this->timeFactory->getTime(), IQueryBuilder::PARAM_INT))
+				->where($reset->expr()->eq('class', $reset->createNamedParameter($class)))
+				->andWhere($reset->expr()->eq('argument', $reset->createNamedParameter($argument)));
+			$reset->execute();
 		}
 	}
 
